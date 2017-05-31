@@ -1,0 +1,27 @@
+{
+  "name": "benkle/feed-response",
+  "description": "Mapper-based services for easy use RSS and Atom responses",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "keywords": ["rdf", "rss", "atom", "feed", "response"],
+  "type": "library",
+  "authors": [
+    {
+      "name": "Benjamin Kleiner",
+      "email": "bizzl@users.sourceforge.net"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Benkle\\FeedResponse\\": "src"
+    }
+  },
+  "require": {
+    "php": ">=5.6.0",
+    "benkle/feed-interfaces": "^1.0",
+    "psr/http-message": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.3"
+  }
+}
