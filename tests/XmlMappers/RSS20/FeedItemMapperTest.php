@@ -28,7 +28,7 @@
 namespace Benkle\FeedResponse\XmlMappers\RSS20;
 
 
-use Benkle\FeedParser\FeedItem;
+use Benkle\FeedInterfaces\ItemInterface;
 use Benkle\FeedResponse\ItemMapperCollection;
 
 class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
@@ -36,7 +36,7 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
     public function testMap()
     {
         $doc = new \DOMDocument();
-        $itemMock = $this->createMock(FeedItem::class);
+        $itemMock = $this->createMock(ItemInterface::class);
         $itemMock
             ->expects($this->once())
             ->method('getTitle')
