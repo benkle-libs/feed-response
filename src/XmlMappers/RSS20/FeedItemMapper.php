@@ -60,8 +60,6 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
         $this->addSimpleTag($doc, $itemNode, 'description', $item->getDescription());
         $this->addSimpleTag($doc, $itemNode, 'pubDate', $item->getLastModified()->format(\DateTime::RSS));
 
-
-
         return $itemNode;
     }
 }
