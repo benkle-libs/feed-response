@@ -50,7 +50,7 @@ trait XMLUtilitiesTrait
             $node->setAttribute($attribute, $attributeValue);
         }
         if (isset($value)) {
-            $value = $doc->createCDATASection($value);
+            $value = $doc->createTextNode($value);
             $node->appendChild($value);
         }
         $parent->appendChild($node);
