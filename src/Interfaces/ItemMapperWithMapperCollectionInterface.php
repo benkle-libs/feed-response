@@ -25,34 +25,19 @@
  */
 
 
-namespace Benkle\FeedResponse\Traits;
+namespace Benkle\FeedResponse\Interfaces;
 
-use Benkle\FeedResponse\ItemMapperCollection;
+
+use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
+use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
 /**
- * Trait WithMapperCollectionTrait
- * @package Benkle\FeedResponse\Traits
+ * Interface ItemMapperWithMapperCollectionInterface
+ * This interface only exists for testing.
+ * @package Benkle\FeedResponse\Interfaces
+ * @deprecated
  */
-trait HasMapperCollectionTrait
+interface ItemMapperWithMapperCollectionInterface extends ItemMapperInterface, HasMapperCollectionInterface
 {
-    /** @var  ItemMapperCollection */
-    private $collection;
 
-    /**
-     * @return ItemMapperCollection
-     */
-    public function getMapperCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
-     * @param ItemMapperCollection $collection
-     * @return $this
-     */
-    public function setMapperCollection($collection)
-    {
-        $this->collection = $collection;
-        return $this;
-    }
 }

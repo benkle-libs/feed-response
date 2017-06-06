@@ -27,8 +27,8 @@
 
 namespace Benkle\FeedResponse;
 
-use Benkle\FeedInterfaces\ItemInterface;
 use Benkle\FeedInterfaces\NodeInterface;
+use Benkle\FeedResponse\Exceptions\MapperNotFoundException;
 use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
@@ -65,6 +65,9 @@ class ItemMapperCollection
      */
     public function remove($class)
     {
+        if (!isset($this->itemMappers[$class])) {
+            throw new MapperNotFoundException($class);
+        }
         if ($this->itemMappers[$class] instanceof HasMapperCollectionInterface) {
             $this->itemMappers[$class]->setMapperCollection(null);
         }
@@ -74,8 +77,9 @@ class ItemMapperCollection
 
     /**
      * Find a mapper for a feed item.
-     * @param ItemInterface $item
-     * @return ItemMapperInterface|bool
+     * @param NodeInterface $item
+     * @return ItemMapperInterface
+     * @throws MapperNotFoundException
      */
     public function find(NodeInterface $item)
     {
@@ -83,6 +87,9 @@ class ItemMapperCollection
         while ($class && !isset($this->itemMappers[$class])) {
             $class = get_parent_class($class);
         }
-        return isset($this->itemMappers[$class]) ? $this->itemMappers[$class] : false;
+        if (!isset($this->itemMappers[$class])) {
+            throw new MapperNotFoundException(get_class($item));
+        }
+        return $this->itemMappers[$class];
     }
 }

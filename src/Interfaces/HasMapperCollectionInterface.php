@@ -40,7 +40,7 @@ interface HasMapperCollectionInterface
      * @param ItemMapperCollection $collection
      * @return $this
      */
-    public function setMapperCollection(ItemMapperCollection $collection);
+    public function setMapperCollection($collection);
 
     /**
      * Get the mapper collection.

@@ -25,34 +25,20 @@
  */
 
 
-namespace Benkle\FeedResponse\Traits;
-
-use Benkle\FeedResponse\ItemMapperCollection;
+namespace Benkle\FeedResponse\Exceptions;
 
 /**
- * Trait WithMapperCollectionTrait
- * @package Benkle\FeedResponse\Traits
+ * Class MapperNotFoundException
+ * @package Benkle\FeedResponse\Exceptions
  */
-trait HasMapperCollectionTrait
+class MapperNotFoundException extends \Exception
 {
-    /** @var  ItemMapperCollection */
-    private $collection;
-
     /**
-     * @return ItemMapperCollection
+     * MapperNotFoundException constructor.
+     * @param string $className
      */
-    public function getMapperCollection()
+    public function __construct($className)
     {
-        return $this->collection;
-    }
-
-    /**
-     * @param ItemMapperCollection $collection
-     * @return $this
-     */
-    public function setMapperCollection($collection)
-    {
-        $this->collection = $collection;
-        return $this;
+        parent::__construct(sprintf('No mapper found for "%s"', $className));
     }
 }
