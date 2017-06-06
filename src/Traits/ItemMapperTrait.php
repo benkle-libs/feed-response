@@ -30,11 +30,11 @@ namespace Benkle\FeedResponse\Traits;
 use Benkle\FeedInterfaces\NodeInterface;
 
 /**
- * Trait XMLMapperTrait
+ * Trait ItemMapperTrait
  * @package Benkle\FeedResponse\Traits
  * @method _map(\DOMDocument $doc, NodeInterface $node): \DOMNode
  */
-trait XMLMapperTrait
+trait ItemMapperTrait
 {
     /**
      * Map an implementor of NodeInterface to a DOMNode.

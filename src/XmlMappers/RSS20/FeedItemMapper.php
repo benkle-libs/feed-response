@@ -32,7 +32,7 @@ use Benkle\FeedInterfaces\ItemInterface;
 use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\Traits\HasMapperCollectionTrait;
-use Benkle\FeedResponse\Traits\XMLMapperTrait;
+use Benkle\FeedResponse\Traits\ItemMapperTrait;
 use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
 use Benkle\FeedResponse\ItemMapperCollection;
 
@@ -42,7 +42,7 @@ use Benkle\FeedResponse\ItemMapperCollection;
  */
 class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterface
 {
-    use XMLUtilitiesTrait, XMLMapperTrait, HasMapperCollectionTrait;
+    use XMLUtilitiesTrait, ItemMapperTrait, HasMapperCollectionTrait;
 
     /**
      * Map a feed item to a DOM node.
