@@ -60,6 +60,29 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
         $this->addSimpleTag($doc, $itemNode, 'description', $item->getDescription());
         $this->addSimpleTag($doc, $itemNode, 'pubDate', $item->getLastModified()->format(\DateTime::RSS));
 
+        if (is_array($item->getEnclosures())) {
+            foreach ($item->getEnclosures() as $enclosure) {
+                $mapper = $this->getMapperCollection()->find($enclosure);
+                $itemNode->appendChild($mapper->map($doc, $enclosure));
+            }
+        }
+
+        if (is_array($item->getRelations())) {
+            foreach ($item->getRelations() as $relation => $url) {
+                $this->addSimpleTag(
+                    $doc,
+                    $itemNode,
+                    'atom:link',
+                    null,
+                    'http://www.w3.org/2005/Atom',
+                    [
+                        'rel' => $relation,
+                        'href' => $url,
+                    ]
+                );
+            }
+        }
+
         return $itemNode;
     }
 }

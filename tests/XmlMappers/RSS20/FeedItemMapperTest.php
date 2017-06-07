@@ -28,14 +28,117 @@
 namespace Benkle\FeedResponse\XmlMappers\RSS20;
 
 
+use Benkle\FeedInterfaces\EnclosureInterface;
 use Benkle\FeedInterfaces\ItemInterface;
+use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\ItemMapperCollection;
 
 class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
 {
-    public function testMap()
+    public function testMapping()
     {
         $doc = new \DOMDocument();
+        $itemMock = $this->mockItem();
+
+        $mapper = new FeedItemMapper();
+
+        $node = $mapper->map($doc, $itemMock);
+
+        $this->assertInstanceOf(\DOMNode::class, $node);
+        $this->assertEquals(
+            '<item>' .
+            '<title>title</title>' .
+            '<guid>publicId</guid>' .
+            '<link>link</link>' .
+            '<description>description</description>' .
+            '<pubDate>Sat, 12 Dec 1998 12:12:12 +0000</pubDate>' .
+            '</item>', $doc->saveXML($node));
+    }
+
+    public function testMappingWithRelations()
+    {
+        $doc = new \DOMDocument();
+        $itemMock = $this->mockItem();
+
+        $itemMock
+            ->expects($this->exactly(2))
+            ->method('getRelations')
+            ->willReturn(['self' => 'this', 'this' => 'self']);
+
+        $mapper = new FeedItemMapper();
+
+        $node = $mapper->map($doc, $itemMock);
+
+        $this->assertInstanceOf(\DOMNode::class, $node);
+        $this->assertEquals(
+            '<item>' .
+            '<title>title</title>' .
+            '<guid>publicId</guid>' .
+            '<link>link</link>' .
+            '<description>description</description>' .
+            '<pubDate>Sat, 12 Dec 1998 12:12:12 +0000</pubDate>' .
+            '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="this"/>' .
+            '<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="this" href="self"/>' .
+            '</item>', $doc->saveXML($node));
+    }
+
+    public function testMappingEnclosures()
+    {
+        $doc = new \DOMDocument();
+        $enclosureMock =$this->createMock(EnclosureInterface::class);
+        $enclosureMapperMock = $this->createMock(ItemMapperInterface::class);
+        $enclosureMapperMock
+            ->expects($this->exactly(2))
+            ->method('map')
+            ->with($doc, $enclosureMock)
+            ->willReturnCallback(function() use ($doc) {
+                return $doc->createElement('enclosure');
+            });
+        $collectionMock = $this->createMock(ItemMapperCollection::class);
+        $collectionMock
+            ->expects($this->exactly(2))
+            ->method('find')
+            ->with($enclosureMock)
+            ->willReturn($enclosureMapperMock);
+
+        $itemMock = $this->mockItem();
+        $itemMock
+            ->expects($this->exactly(2))
+            ->method('getEnclosures')
+            ->willReturn([$enclosureMock, $enclosureMock]);
+
+        $mapper = new FeedItemMapper();
+        $mapper->setMapperCollection($collectionMock);
+
+        $node = $mapper->map($doc, $itemMock);
+
+        $this->assertInstanceOf(\DOMNode::class, $node);
+        $this->assertEquals(
+            '<item>' .
+            '<title>title</title>' .
+            '<guid>publicId</guid>' .
+            '<link>link</link>' .
+            '<description>description</description>' .
+            '<pubDate>Sat, 12 Dec 1998 12:12:12 +0000</pubDate>' .
+            '<enclosure/>' .
+            '<enclosure/>' .
+            '</item>', $doc->saveXML($node));
+    }
+
+    public function testCollectionHandling()
+    {
+        $collectionMock = $this->createMock(ItemMapperCollection::class);
+
+        $mapper = new FeedItemMapper();
+        $mapper->setMapperCollection($collectionMock);
+        $this->assertEquals($collectionMock, $mapper->getMapperCollection());
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockItem()
+    {
         $itemMock = $this->createMock(ItemInterface::class);
         $itemMock
             ->expects($this->once())
@@ -57,28 +160,6 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getLastModified')
             ->willReturn(new \DateTime('1998-12-12 12:12:12Z'));
-
-        $mapper = new FeedItemMapper();
-
-        $node = $mapper->map($doc, $itemMock);
-
-        $this->assertInstanceOf(\DOMNode::class, $node);
-        $this->assertEquals(
-            '<item>' .
-            '<title>title</title>' .
-            '<guid>publicId</guid>' .
-            '<link>link</link>' .
-            '<description>description</description>' .
-            '<pubDate>Sat, 12 Dec 1998 12:12:12 +0000</pubDate>' .
-            '</item>', $doc->saveXML($node));
-    }
-
-    public function testCollectionHandling()
-    {
-        $collectionMock = $this->createMock(ItemMapperCollection::class);
-
-        $mapper = new FeedItemMapper();
-        $mapper->setMapperCollection($collectionMock);
-        $this->assertEquals($collectionMock, $mapper->getMapperCollection());
+        return $itemMock;
     }
 }
