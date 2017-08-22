@@ -84,12 +84,18 @@ class ItemMapperCollection
     public function find(NodeInterface $item)
     {
         $class = get_class($item);
-        while ($class && !isset($this->itemMappers[$class])) {
+        while ($class) {
+            if (isset($this->itemMappers[$class])) {
+                return $this->itemMappers[$class];
+            }
             $class = get_parent_class($class);
         }
-        if (!isset($this->itemMappers[$class])) {
-            throw new MapperNotFoundException(get_class($item));
+        $interfaces = class_implements($item);
+        foreach ($interfaces as $interface) {
+            if (isset($this->itemMappers[$interface])) {
+                return $this->itemMappers[$interface];
+            }
         }
-        return $this->itemMappers[$class];
+        throw new MapperNotFoundException(get_class($item));
     }
 }
