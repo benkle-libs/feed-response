@@ -40,7 +40,7 @@ use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
  * Class FeedMapper
  * @package Benkle\FeedResponse\XmlMappers
  */
-class FeedMapper implements HasMapperCollectionInterface
+class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
 {
     use XMLUtilitiesTrait, HasMapperCollectionTrait;
 
