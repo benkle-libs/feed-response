@@ -39,7 +39,7 @@ use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 class ItemMapperCollection
 {
     /**
-     * @var ItemMapperInterface[]
+     * @var ItemMapperCollectionItem[]
      */
     private $itemMappers = [];
 
@@ -47,14 +47,18 @@ class ItemMapperCollection
      * Add a new item mapper.
      * @param string $class
      * @param ItemMapperInterface $mapper
+     * @param int $priority
      * @return $this
      */
-    public function add($class, ItemMapperInterface $mapper)
+    public function add($class, ItemMapperInterface $mapper, $priority = 10)
     {
-        $this->itemMappers[$class] = $mapper;
+        $this->itemMappers[$class] = new ItemMapperCollectionItem($mapper, $priority);
         if ($mapper instanceof HasMapperCollectionInterface) {
             $mapper->setMapperCollection($this);
         }
+        uasort($this->itemMappers, function(ItemMapperCollectionItem $a, ItemMapperCollectionItem $b) {
+            return $a->compare($b);
+        });
         return $this;
     }
 
@@ -68,8 +72,8 @@ class ItemMapperCollection
         if (!isset($this->itemMappers[$class])) {
             throw new MapperNotFoundException($class);
         }
-        if ($this->itemMappers[$class] instanceof HasMapperCollectionInterface) {
-            $this->itemMappers[$class]->setMapperCollection(null);
+        if ($this->itemMappers[$class]->getMapper() instanceof HasMapperCollectionInterface) {
+            $this->itemMappers[$class]->getMapper()->setMapperCollection(null);
         }
         unset($this->itemMappers[$class]);
         return $this;
@@ -83,17 +87,9 @@ class ItemMapperCollection
      */
     public function find(NodeInterface $item)
     {
-        $class = get_class($item);
-        while ($class) {
-            if (isset($this->itemMappers[$class])) {
-                return $this->itemMappers[$class];
-            }
-            $class = get_parent_class($class);
-        }
-        $interfaces = class_implements($item);
-        foreach ($interfaces as $interface) {
-            if (isset($this->itemMappers[$interface])) {
-                return $this->itemMappers[$interface];
+        foreach ($this->itemMappers as $itemClass => $itemMapping) {
+            if ($item instanceof $itemClass) {
+                return $itemMapping->getMapper();
             }
         }
         throw new MapperNotFoundException(get_class($item));

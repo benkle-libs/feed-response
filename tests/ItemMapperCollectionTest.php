@@ -53,6 +53,17 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
         self::assertEquals($mapperMock, $collection->find($nodeMock));
     }
 
+    public function testAddAndFindWithPriority()
+    {
+        $collection = new ItemMapperCollection();
+        $mapperMock1 = $this->createMock(ItemMapperInterface::class);
+        $mapperMock2 = $this->createMock(ItemMapperInterface::class);
+        $nodeMock = $this->createMock(ChannelInterface::class);
+        self::assertEquals($collection, $collection->add(ChannelInterface::class, $mapperMock1, 10));
+        self::assertEquals($collection, $collection->add(NodeInterface::class, $mapperMock2, 5));
+        self::assertEquals($mapperMock2, $collection->find($nodeMock));
+    }
+
     public function testAddMapperWithCollectionAccess()
     {
         $collection = new ItemMapperCollection();
