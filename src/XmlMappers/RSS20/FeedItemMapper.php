@@ -34,7 +34,6 @@ use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\Traits\HasMapperCollectionTrait;
 use Benkle\FeedResponse\Traits\ItemMapperTrait;
 use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
-use Benkle\FeedResponse\ItemMapperCollection;
 
 /**
  * Class FeedItemMapper

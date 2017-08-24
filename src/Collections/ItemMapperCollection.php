@@ -25,7 +25,7 @@
  */
 
 
-namespace Benkle\FeedResponse;
+namespace Benkle\FeedResponse\Collections;
 
 use Benkle\FeedInterfaces\NodeInterface;
 use Benkle\FeedResponse\Exceptions\MapperNotFoundException;
@@ -53,6 +53,7 @@ class ItemMapperCollection
     public function add($class, ItemMapperInterface $mapper, $priority = 10)
     {
         $this->itemMappers[$class] = new ItemMapperCollectionItem($mapper, $priority);
+        /** @var HasMapperCollectionInterface $mapper */
         if ($mapper instanceof HasMapperCollectionInterface) {
             $mapper->setMapperCollection($this);
         }

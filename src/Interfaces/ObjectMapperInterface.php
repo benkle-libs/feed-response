@@ -26,6 +26,7 @@
 
 
 namespace Benkle\FeedResponse\Interfaces;
+
 use Benkle\FeedInterfaces\NodeInterface;
 
 /**

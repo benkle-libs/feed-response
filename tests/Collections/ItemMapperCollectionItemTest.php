@@ -25,7 +25,7 @@
  */
 
 
-namespace Benkle\FeedResponse;
+namespace Benkle\FeedResponse\Collections;
 
 
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;

@@ -27,7 +27,7 @@
 
 namespace Benkle\FeedResponse\Traits;
 
-use Benkle\FeedResponse\ItemMapperCollection;
+use Benkle\FeedResponse\Collections\ItemMapperCollection;
 
 /**
  * Trait WithMapperCollectionTrait

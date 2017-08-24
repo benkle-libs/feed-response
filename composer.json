@@ -19,9 +19,11 @@
   "require": {
     "php": ">=5.6.0",
     "benkle/feed-interfaces": "^1.0",
-    "psr/http-message": "^1.0"
+    "psr/http-message": "^1.0",
+    "symfony/http-foundation": "^3.3"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.3"
+    "phpunit/phpunit": "^5.3",
+    "benkle/feed-parser": "^2.0"
   }
 }

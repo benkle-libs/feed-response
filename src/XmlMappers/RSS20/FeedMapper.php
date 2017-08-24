@@ -31,9 +31,7 @@ use Benkle\FeedInterfaces\FeedInterface;
 use Benkle\FeedInterfaces\ItemInterface;
 use Benkle\FeedResponse\Interfaces\FeedMapperInterface;
 use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
-use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\Traits\HasMapperCollectionTrait;
-use Benkle\FeedResponse\Traits\WithItemMappersTrait;
 use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
 
 /**
@@ -43,33 +41,6 @@ use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
 class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
 {
     use XMLUtilitiesTrait, HasMapperCollectionTrait;
-
-    /**
-     * @param FeedInterface $feed
-     * @param \DOMDocument $doc
-     * @param \DOMNode $channel
-     */
-    protected function mapChannelMetadata(FeedInterface $feed, \DOMDocument $doc, \DOMNode $channel)
-    {
-        $this->addSimpleTag($doc, $channel, 'title', $feed->getTitle());
-        $this->addSimpleTag($doc, $channel, 'link', $feed->getLink());
-        $this->addSimpleTag($doc, $channel, 'description', $feed->getDescription());
-        $this->addSimpleTag($doc, $channel, 'lastBuildDate', $feed->getLastModified()->format(\DateTime::RSS));
-    }
-
-    /**
-     * @param \DOMDocument $doc
-     * @param \DOMNode $itemNode
-     * @param ItemInterface $item
-     */
-    protected function mapItem(\DOMDocument $doc, \DOMNode $itemNode, ItemInterface $item)
-    {
-        $this->addSimpleTag($doc, $itemNode, 'title', $item->getTitle());
-        $this->addSimpleTag($doc, $itemNode, 'description', $item->getDescription());
-        $this->addSimpleTag($doc, $itemNode, 'link', $item->getLink());
-        $this->addSimpleTag($doc, $itemNode, 'guid', $item->getPublicId());
-        $this->addSimpleTag($doc, $itemNode, 'pubDate', $item->getLastModified()->format(\DateTime::RSS));
-    }
 
     /**
      * Map a feed to a DOM document.
@@ -109,5 +80,32 @@ class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param FeedInterface $feed
+     * @param \DOMDocument $doc
+     * @param \DOMNode $channel
+     */
+    protected function mapChannelMetadata(FeedInterface $feed, \DOMDocument $doc, \DOMNode $channel)
+    {
+        $this->addSimpleTag($doc, $channel, 'title', $feed->getTitle());
+        $this->addSimpleTag($doc, $channel, 'link', $feed->getLink());
+        $this->addSimpleTag($doc, $channel, 'description', $feed->getDescription());
+        $this->addSimpleTag($doc, $channel, 'lastBuildDate', $feed->getLastModified()->format(\DateTime::RSS));
+    }
+
+    /**
+     * @param \DOMDocument $doc
+     * @param \DOMNode $itemNode
+     * @param ItemInterface $item
+     */
+    protected function mapItem(\DOMDocument $doc, \DOMNode $itemNode, ItemInterface $item)
+    {
+        $this->addSimpleTag($doc, $itemNode, 'title', $item->getTitle());
+        $this->addSimpleTag($doc, $itemNode, 'description', $item->getDescription());
+        $this->addSimpleTag($doc, $itemNode, 'link', $item->getLink());
+        $this->addSimpleTag($doc, $itemNode, 'guid', $item->getPublicId());
+        $this->addSimpleTag($doc, $itemNode, 'pubDate', $item->getLastModified()->format(\DateTime::RSS));
     }
 }

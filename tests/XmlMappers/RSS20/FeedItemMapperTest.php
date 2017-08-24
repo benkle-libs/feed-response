@@ -30,8 +30,8 @@ namespace Benkle\FeedResponse\XmlMappers\RSS20;
 
 use Benkle\FeedInterfaces\EnclosureInterface;
 use Benkle\FeedInterfaces\ItemInterface;
+use Benkle\FeedResponse\Collections\ItemMapperCollection;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
-use Benkle\FeedResponse\ItemMapperCollection;
 
 class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,6 +53,35 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             '<description>description</description>' .
             '<pubDate>Sat, 12 Dec 1998 12:12:12 +0000</pubDate>' .
             '</item>', $doc->saveXML($node));
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockItem()
+    {
+        $itemMock = $this->createMock(ItemInterface::class);
+        $itemMock
+            ->expects($this->once())
+            ->method('getTitle')
+            ->willReturn('title');
+        $itemMock
+            ->expects($this->once())
+            ->method('getPublicId')
+            ->willReturn('publicId');
+        $itemMock
+            ->expects($this->once())
+            ->method('getLink')
+            ->willReturn('link');
+        $itemMock
+            ->expects($this->once())
+            ->method('getDescription')
+            ->willReturn('description');
+        $itemMock
+            ->expects($this->once())
+            ->method('getLastModified')
+            ->willReturn(new \DateTime('1998-12-12 12:12:12Z'));
+        return $itemMock;
     }
 
     public function testMappingWithRelations()
@@ -132,34 +161,5 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
         $mapper = new FeedItemMapper();
         $mapper->setMapperCollection($collectionMock);
         $this->assertEquals($collectionMock, $mapper->getMapperCollection());
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function mockItem()
-    {
-        $itemMock = $this->createMock(ItemInterface::class);
-        $itemMock
-            ->expects($this->once())
-            ->method('getTitle')
-            ->willReturn('title');
-        $itemMock
-            ->expects($this->once())
-            ->method('getPublicId')
-            ->willReturn('publicId');
-        $itemMock
-            ->expects($this->once())
-            ->method('getLink')
-            ->willReturn('link');
-        $itemMock
-            ->expects($this->once())
-            ->method('getDescription')
-            ->willReturn('description');
-        $itemMock
-            ->expects($this->once())
-            ->method('getLastModified')
-            ->willReturn(new \DateTime('1998-12-12 12:12:12Z'));
-        return $itemMock;
     }
 }

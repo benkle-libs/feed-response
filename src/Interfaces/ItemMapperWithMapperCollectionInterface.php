@@ -28,9 +28,6 @@
 namespace Benkle\FeedResponse\Interfaces;
 
 
-use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
-use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
-
 /**
  * Interface ItemMapperWithMapperCollectionInterface
  * This interface only exists for testing.
