@@ -27,38 +27,47 @@
 
 namespace Benkle\FeedResponse\Collections;
 
-use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
-
 /**
- * Class ItemMapperCollectionItem
- * @package Benkle\FeedResponse
+ * Class AbstractCollectionItem
+ * @package Benkle\FeedResponse\Collections
  * @internal
  */
-class ItemMapperCollectionItem extends AbstractCollectionItem
+abstract class AbstractCollectionItem
 {
-    /** @var  ItemMapperInterface */
-    private $mapper;
+    /** @var int */
+    private $priority;
 
     /**
-     * ItemMapperCollectionItem constructor.
-     * @param ItemMapperInterface $mapper
+     * AbstractCollectionItem constructor.
      * @param int $priority
      */
-    public function __construct(ItemMapperInterface $mapper, $priority)
+    public function __construct($priority)
     {
-        parent::__construct($priority);
-        $this->mapper = $mapper;
+        $this->priority = $priority;
     }
-
 
     /**
-     * Get the item mapper.
-     * @return ItemMapperInterface
+     * Get the priority.
+     * @return int
      */
-    public function getMapper()
+    public function getPriority()
     {
-        return $this->mapper;
+        return $this->priority;
     }
 
-
+    /**
+     * Compare two item mappings by priority.
+     * @param ItemMapperCollectionItem $itemMapping
+     * @return int
+     */
+    public function compare(AbstractCollectionItem $itemMapping)
+    {
+        if ($this->priority < $itemMapping->priority) {
+            return -1;
+        } elseif ($this->priority > $itemMapping->priority) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

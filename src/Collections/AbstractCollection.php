@@ -27,64 +27,66 @@
 
 namespace Benkle\FeedResponse\Collections;
 
-use Benkle\FeedInterfaces\NodeInterface;
 use Benkle\FeedResponse\Exceptions\MapperNotFoundException;
-use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
 /**
- * Class ItemMapperCollection
- * @package Benkle\FeedResponse
+ * Class AbstractCollection
+ * @package Benkle\FeedResponse\Collections
  */
-class ItemMapperCollection extends AbstractCollection
+abstract class AbstractCollection
 {
     /**
-     * Add a new item mapper.
+     * @var AbstractCollectionItem[]
+     */
+    private $items = [];
+
+    /**
+     * Add a new item.
      * @param string $class
      * @param ItemMapperInterface $mapper
      * @param int $priority
-     * @return ItemMapperCollection
+     * @return AbstractCollection
      */
-    public function add($class, ItemMapperInterface $mapper, $priority = 10)
+    public function addItem($class, AbstractCollectionItem $item)
     {
-        $item = new ItemMapperCollectionItem($mapper, $priority);
-        /** @var HasMapperCollectionInterface $mapper */
-        if ($mapper instanceof HasMapperCollectionInterface) {
-            $mapper->setMapperCollection($this);
+        $this->items[$class] = $item;
+        uasort(
+            $this->items, function (ItemMapperCollectionItem $a, ItemMapperCollectionItem $b) {
+            return $a->compare($b);
         }
-        $this->addItem($class, $item);
+        );
         return $this;
     }
 
     /**
-     * Remove an item mapper.
-     * @param $class
-     * @return ItemMapperCollection
+     * Remove an item.
+     * @param string $class
+     * @return AbstractCollectionItem
      */
-    public function remove($class)
+    public function removeItem($class)
     {
-        /** @var ItemMapperCollectionItem $item */
-        $item = $this->removeItem($class);
-        /** @var HasMapperCollectionInterface $mapper */
-        $itemMapper = $item->getMapper();
-        if ($itemMapper instanceof HasMapperCollectionInterface) {
-            $itemMapper->setMapperCollection(null);
+        if (!isset($this->items[$class])) {
+            throw new MapperNotFoundException($class);
         }
-        return $this;
+        $result = $this->items[$class];
+        unset($this->items[$class]);
+        return $result;
     }
 
     /**
      * Find a mapper for a feed item.
-     * @param NodeInterface $node
-     * @return ItemMapperInterface
+     * @param Object $item
+     * @return AbstractCollectionItem
      * @throws MapperNotFoundException
      */
-    public function find(NodeInterface $node)
+    public function findItem($item)
     {
-        /** @var ItemMapperCollectionItem $item */
-        $item = parent::findItem($node);
-        return $item->getMapper();
+        foreach ($this->items as $itemClass => $itemMapping) {
+            if ($item instanceof $itemClass) {
+                return $itemMapping;
+            }
+        }
+        throw new MapperNotFoundException(get_class($item));
     }
-
-
 }
