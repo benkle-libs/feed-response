@@ -28,7 +28,6 @@
 namespace Benkle\FeedResponse\Collections;
 
 use Benkle\FeedResponse\Exceptions\MapperNotFoundException;
-use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
 /**
  * Class AbstractCollection
@@ -44,7 +43,7 @@ abstract class AbstractCollection
     /**
      * Add a new item.
      * @param string $class
-     * @param ItemMapperInterface $mapper
+     * @param AbstractCollectionItem $item
      * @param int $priority
      * @return AbstractCollection
      */
@@ -52,7 +51,7 @@ abstract class AbstractCollection
     {
         $this->items[$class] = $item;
         uasort(
-            $this->items, function (ItemMapperCollectionItem $a, ItemMapperCollectionItem $b) {
+            $this->items, function (AbstractCollectionItem $a, AbstractCollectionItem $b) {
             return $a->compare($b);
         }
         );

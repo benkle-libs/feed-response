@@ -76,6 +76,7 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
 
         if (is_array($item->getEnclosures())) {
             foreach ($item->getEnclosures() as $enclosure) {
+                /** @var ItemMapperInterface $mapper */
                 $mapper = $this->getMapperCollection()->find($enclosure);
                 $itemNode->appendChild($mapper->map($doc, $enclosure));
             }

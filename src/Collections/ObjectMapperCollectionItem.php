@@ -25,34 +25,38 @@
  */
 
 
-namespace Benkle\FeedResponse\Traits;
+namespace Benkle\FeedResponse\Collections;
 
-use Benkle\FeedResponse\Collections\AbstractCollection;
+use Benkle\FeedResponse\Interfaces\ObjectMapperInterface;
 
 /**
- * Trait HasMapperCollectionTrait
- * @package Benkle\FeedResponse\Traits
+ * Class ObjectMapperCollectionItem
+ * @package Benkle\FeedResponse\Collections
+ * @internal
  */
-trait HasMapperCollectionTrait
+class ObjectMapperCollectionItem extends AbstractCollectionItem
 {
-    /** @var  AbstractCollection */
-    private $collection;
+    /** @var  ObjectMapperInterface */
+    private $mapper;
 
     /**
-     * @return AbstractCollection
+     * ObjectMapperCollectionItem constructor.
+     * @param ObjectMapperInterface $mapper
+     * @param int $priority
      */
-    public function getMapperCollection()
+    public function __construct(ObjectMapperInterface $mapper, $priority)
     {
-        return $this->collection;
+        parent::__construct($priority);
+        $this->mapper = $mapper;
     }
 
+
     /**
-     * @param AbstractCollection $collection
-     * @return $this
+     * @return ObjectMapperInterface
      */
-    public function setMapperCollection($collection)
+    public function getMapper()
     {
-        $this->collection = $collection;
-        return $this;
+        return $this->mapper;
     }
+
 }

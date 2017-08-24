@@ -31,6 +31,7 @@ namespace Benkle\FeedResponse\XmlMappers\Atom;
 use Benkle\FeedInterfaces\FeedInterface;
 use Benkle\FeedResponse\Interfaces\FeedMapperInterface;
 use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
+use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\Traits\HasMapperCollectionTrait;
 use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
 
@@ -77,6 +78,7 @@ class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
         }
 
         foreach ($feed->getItems() as $item) {
+            /** @var ItemMapperInterface $mapper */
             $mapper = $this->getMapperCollection()->find($item);
             if ($mapper) {
                 $root->appendChild($mapper->map($result, $item));

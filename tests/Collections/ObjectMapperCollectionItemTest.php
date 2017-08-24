@@ -25,34 +25,33 @@
  */
 
 
-namespace Benkle\FeedResponse\Traits;
+namespace Benkle\FeedResponse\Collections;
 
-use Benkle\FeedResponse\Collections\AbstractCollection;
 
-/**
- * Trait HasMapperCollectionTrait
- * @package Benkle\FeedResponse\Traits
- */
-trait HasMapperCollectionTrait
+use Benkle\FeedResponse\Interfaces\ObjectMapperInterface;
+
+class ObjectMapperCollectionItemTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  AbstractCollection */
-    private $collection;
-
-    /**
-     * @return AbstractCollection
-     */
-    public function getMapperCollection()
+    public function testData()
     {
-        return $this->collection;
+        $objectMapperMock = $this->createMock(ObjectMapperInterface::class);
+        $objectMapping = new ObjectMapperCollectionItem($objectMapperMock, 42);
+
+        $this->assertEquals(42, $objectMapping->getPriority());
+        $this->assertEquals($objectMapperMock, $objectMapping->getMapper());
     }
 
-    /**
-     * @param AbstractCollection $collection
-     * @return $this
-     */
-    public function setMapperCollection($collection)
+    public function testCompare()
     {
-        $this->collection = $collection;
-        return $this;
+        $objectMapperMock = $this->createMock(ObjectMapperInterface::class);
+        $lesserMapping = new ObjectMapperCollectionItem($objectMapperMock, 10);
+        $equalMapping = new ObjectMapperCollectionItem($objectMapperMock, 20);
+        $greaterMapping = new ObjectMapperCollectionItem($objectMapperMock, 30);
+
+        $objectMapping = new ObjectMapperCollectionItem($objectMapperMock, 20);
+
+        $this->assertEquals(1, $objectMapping->compare($lesserMapping));
+        $this->assertEquals(0, $objectMapping->compare($equalMapping));
+        $this->assertEquals(-1, $objectMapping->compare($greaterMapping));
     }
 }

@@ -85,6 +85,4 @@ class ItemMapperCollection extends AbstractCollection
         $item = parent::findItem($node);
         return $item->getMapper();
     }
-
-
 }

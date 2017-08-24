@@ -27,7 +27,7 @@
 
 namespace Benkle\FeedResponse\Interfaces;
 
-use Benkle\FeedResponse\Collections\ItemMapperCollection;
+use Benkle\FeedResponse\Collections\AbstractCollection;
 
 /**
  * Interface HasMapperCollectionInterface
@@ -37,14 +37,14 @@ interface HasMapperCollectionInterface
 {
     /**
      * Set the mapper collection.
-     * @param ItemMapperCollection $collection
+     * @param AbstractCollection $collection
      * @return $this
      */
     public function setMapperCollection($collection);
 
     /**
      * Get the mapper collection.
-     * @return ItemMapperCollection
+     * @return AbstractCollection
      */
     public function getMapperCollection();
 }

@@ -25,34 +25,52 @@
  */
 
 
-namespace Benkle\FeedResponse\Traits;
+namespace Benkle\FeedResponse\Collections;
 
-use Benkle\FeedResponse\Collections\AbstractCollection;
+use Benkle\FeedResponse\Exceptions\MapperNotFoundException;
+use Benkle\FeedResponse\Interfaces\ObjectMapperInterface;
 
 /**
- * Trait HasMapperCollectionTrait
- * @package Benkle\FeedResponse\Traits
+ * Class ObjectMapperCollection
+ * @package Benkle\FeedResponse\Collections
  */
-trait HasMapperCollectionTrait
+class ObjectMapperCollection extends AbstractCollection
 {
-    /** @var  AbstractCollection */
-    private $collection;
-
     /**
-     * @return AbstractCollection
+     * Add a new item mapper.
+     * @param string $class
+     * @param ObjectMapperInterface $mapper
+     * @param int $priority
+     * @return ObjectMapperCollection
      */
-    public function getMapperCollection()
+    public function add($class, ObjectMapperInterface $mapper, $priority = 10)
     {
-        return $this->collection;
+        $item = new ObjectMapperCollectionItem($mapper, $priority);
+        $this->addItem($class, $item);
+        return $this;
     }
 
     /**
-     * @param AbstractCollection $collection
-     * @return $this
+     * Remove an item mapper.
+     * @param $class
+     * @return ObjectMapperCollection
      */
-    public function setMapperCollection($collection)
+    public function remove($class)
     {
-        $this->collection = $collection;
+        $item = $this->removeItem($class);
         return $this;
+    }
+
+    /**
+     * Find a mapper for a feed item.
+     * @param object $node
+     * @return ObjectMapperInterface
+     * @throws MapperNotFoundException
+     */
+    public function find($node)
+    {
+        /** @var ObjectMapperCollectionItem $item */
+        $item = parent::findItem($node);
+        return $item->getMapper();
     }
 }
