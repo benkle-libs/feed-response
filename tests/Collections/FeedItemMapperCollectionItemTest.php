@@ -30,12 +30,12 @@ namespace Benkle\FeedResponse\Collections;
 
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
-class ItemMapperCollectionItemTest extends \PHPUnit_Framework_TestCase
+class FeedItemMapperCollectionItemTest extends \PHPUnit_Framework_TestCase
 {
     public function testData()
     {
         $itemMapperMock = $this->createMock(ItemMapperInterface::class);
-        $itemMapping = new ItemMapperCollectionItem($itemMapperMock, 42);
+        $itemMapping = new FeedItemMapperCollectionItem($itemMapperMock, 42);
 
         $this->assertEquals(42, $itemMapping->getPriority());
         $this->assertEquals($itemMapperMock, $itemMapping->getMapper());
@@ -44,11 +44,11 @@ class ItemMapperCollectionItemTest extends \PHPUnit_Framework_TestCase
     public function testCompare()
     {
         $itemMapperMock = $this->createMock(ItemMapperInterface::class);
-        $lesserMapping = new ItemMapperCollectionItem($itemMapperMock, 10);
-        $equalMapping = new ItemMapperCollectionItem($itemMapperMock, 20);
-        $greaterMapping = new ItemMapperCollectionItem($itemMapperMock, 30);
+        $lesserMapping = new FeedItemMapperCollectionItem($itemMapperMock, 10);
+        $equalMapping = new FeedItemMapperCollectionItem($itemMapperMock, 20);
+        $greaterMapping = new FeedItemMapperCollectionItem($itemMapperMock, 30);
 
-        $itemMapping = new ItemMapperCollectionItem($itemMapperMock, 20);
+        $itemMapping = new FeedItemMapperCollectionItem($itemMapperMock, 20);
 
         $this->assertEquals(1, $itemMapping->compare($lesserMapping));
         $this->assertEquals(0, $itemMapping->compare($equalMapping));

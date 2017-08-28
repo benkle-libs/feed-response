@@ -30,17 +30,17 @@ namespace Benkle\FeedResponse\Collections;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
 /**
- * Class ItemMapperCollectionItem
+ * Class FeedItemMapperCollectionItem
  * @package Benkle\FeedResponse
  * @internal
  */
-class ItemMapperCollectionItem extends AbstractCollectionItem
+class FeedItemMapperCollectionItem extends AbstractCollectionItem
 {
     /** @var  ItemMapperInterface */
     private $mapper;
 
     /**
-     * ItemMapperCollectionItem constructor.
+     * FeedItemMapperCollectionItem constructor.
      * @param ItemMapperInterface $mapper
      * @param int $priority
      */

@@ -33,21 +33,21 @@ use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
 /**
- * Class ItemMapperCollection
+ * Class FeedItemMapperCollection
  * @package Benkle\FeedResponse
  */
-class ItemMapperCollection extends AbstractCollection
+class FeedItemMapperCollection extends AbstractCollection
 {
     /**
      * Add a new item mapper.
      * @param string $class
      * @param ItemMapperInterface $mapper
      * @param int $priority
-     * @return ItemMapperCollection
+     * @return FeedItemMapperCollection
      */
     public function add($class, ItemMapperInterface $mapper, $priority = 10)
     {
-        $item = new ItemMapperCollectionItem($mapper, $priority);
+        $item = new FeedItemMapperCollectionItem($mapper, $priority);
         /** @var HasMapperCollectionInterface $mapper */
         if ($mapper instanceof HasMapperCollectionInterface) {
             $mapper->setMapperCollection($this);
@@ -59,11 +59,11 @@ class ItemMapperCollection extends AbstractCollection
     /**
      * Remove an item mapper.
      * @param $class
-     * @return ItemMapperCollection
+     * @return FeedItemMapperCollection
      */
     public function remove($class)
     {
-        /** @var ItemMapperCollectionItem $item */
+        /** @var FeedItemMapperCollectionItem $item */
         $item = $this->removeItem($class);
         /** @var HasMapperCollectionInterface $mapper */
         $itemMapper = $item->getMapper();
@@ -81,7 +81,7 @@ class ItemMapperCollection extends AbstractCollection
      */
     public function find(NodeInterface $node)
     {
-        /** @var ItemMapperCollectionItem $item */
+        /** @var FeedItemMapperCollectionItem $item */
         $item = parent::findItem($node);
         return $item->getMapper();
     }

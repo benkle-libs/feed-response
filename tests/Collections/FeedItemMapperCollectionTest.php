@@ -33,11 +33,11 @@ use Benkle\FeedInterfaces\NodeInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperWithMapperCollectionInterface;
 
-class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
+class FeedItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddAndFind()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $mapperMock = $this->createMock(ItemMapperInterface::class);
         $nodeMock = $this->createMock(NodeInterface::class);
         self::assertEquals($collection, $collection->add(get_class($nodeMock), $mapperMock));
@@ -46,7 +46,7 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAndFindByInterface()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $mapperMock = $this->createMock(ItemMapperInterface::class);
         $nodeMock = $this->createMock(ChannelInterface::class);
         self::assertEquals($collection, $collection->add(ChannelInterface::class, $mapperMock));
@@ -55,7 +55,7 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAndFindWithPriority()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $mapperMock1 = $this->createMock(ItemMapperInterface::class);
         $mapperMock2 = $this->createMock(ItemMapperInterface::class);
         $nodeMock = $this->createMock(ChannelInterface::class);
@@ -66,7 +66,7 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddMapperWithCollectionAccess()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $mapperMock = $this->createMock(ItemMapperWithMapperCollectionInterface::class);
         $mapperMock
             ->expects($this->once())
@@ -83,14 +83,14 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindWithNoMapperAvailable()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $nodeMock = $this->createMock(ChannelInterface::class);
         $collection->find($nodeMock);
     }
 
     public function testAddAndRemove()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $mapperMock = $this->createMock(ItemMapperInterface::class);
         $nodeMock = $this->createMock(NodeInterface::class);
         self::assertEquals($collection, $collection->add(get_class($nodeMock), $mapperMock));
@@ -99,7 +99,7 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAndRemoveMapperWithCollectionAccess()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $mapperMock = $this->createMock(ItemMapperWithMapperCollectionInterface::class);
         $mapperMock
             ->expects($this->exactly(2))
@@ -116,7 +116,7 @@ class ItemMapperCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveWithoutAdd()
     {
-        $collection = new ItemMapperCollection();
+        $collection = new FeedItemMapperCollection();
         $nodeMock = $this->createMock(NodeInterface::class);
         $collection->remove(get_class($nodeMock));
     }

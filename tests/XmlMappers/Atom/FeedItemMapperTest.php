@@ -30,7 +30,7 @@ namespace Benkle\FeedResponse\XmlMappers\Atom;
 
 use Benkle\FeedInterfaces\EnclosureInterface;
 use Benkle\FeedInterfaces\ItemInterface;
-use Benkle\FeedResponse\Collections\ItemMapperCollection;
+use Benkle\FeedResponse\Collections\FeedItemMapperCollection;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 
 class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
@@ -123,7 +123,7 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function() use ($doc) {
                 return $doc->createElement('enclosure');
             });
-        $collectionMock = $this->createMock(ItemMapperCollection::class);
+        $collectionMock = $this->createMock(FeedItemMapperCollection::class);
         $collectionMock
             ->expects($this->exactly(2))
             ->method('find')
@@ -156,7 +156,7 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectionHandling()
     {
-        $collectionMock = $this->createMock(ItemMapperCollection::class);
+        $collectionMock = $this->createMock(FeedItemMapperCollection::class);
 
         $mapper = new FeedItemMapper();
         $mapper->setMapperCollection($collectionMock);

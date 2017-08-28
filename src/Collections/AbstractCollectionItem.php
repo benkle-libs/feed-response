@@ -57,7 +57,7 @@ abstract class AbstractCollectionItem
 
     /**
      * Compare two item mappings by priority.
-     * @param ItemMapperCollectionItem $itemMapping
+     * @param FeedItemMapperCollectionItem $itemMapping
      * @return int
      */
     public function compare(AbstractCollectionItem $itemMapping)
