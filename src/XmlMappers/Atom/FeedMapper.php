@@ -33,6 +33,7 @@ use Benkle\FeedResponse\Interfaces\FeedMapperInterface;
 use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
 use Benkle\FeedResponse\Traits\HasMapperCollectionTrait;
+use Benkle\FeedResponse\Traits\WithZeroExtraHeadersTrait;
 use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
 
 /**
@@ -41,7 +42,7 @@ use Benkle\FeedResponse\Traits\XMLUtilitiesTrait;
  */
 class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
 {
-    use XMLUtilitiesTrait, HasMapperCollectionTrait;
+    use XMLUtilitiesTrait, HasMapperCollectionTrait, WithZeroExtraHeadersTrait;
 
     /**
      * Map a feed to a DOM document.
@@ -86,5 +87,14 @@ class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Get the feeds content type.
+     * @return string
+     */
+    public function getContentType()
+    {
+        return 'application/atom+xml';
     }
 }

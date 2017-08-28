@@ -25,32 +25,20 @@
  */
 
 
-namespace Benkle\FeedResponse\Interfaces;
-
-use Benkle\FeedInterfaces\FeedInterface;
+namespace Benkle\FeedResponse\Traits;
 
 /**
- * Interface FeedMapperInterface
- * @package Benkle\FeedResponse\Interfaces
+ * Trait WithZeroExtraHeadersTrait
+ * @package Benkle\FeedResponse\Traits
  */
-interface FeedMapperInterface
+trait WithZeroExtraHeadersTrait
 {
-    /**
-     * Map a feed to a DOM document.
-     * @param FeedInterface $feed
-     * @return \DOMDocument
-     */
-    public function map(FeedInterface $feed);
-
-    /**
-     * Get the feeds content type.
-     * @return string
-     */
-    public function getContentType();
-
     /**
      * Get extra headers necessary for this feed type.
      * @return string[]
      */
-    public function getExtraHeaders();
+    public function getExtraHeaders()
+    {
+        return [];
+    }
 }
