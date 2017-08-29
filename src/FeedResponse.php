@@ -130,7 +130,7 @@ class FeedResponse extends Response
      */
     public function addItem($item)
     {
-        if (in_array($item, $this->items)) {
+        if (!in_array($item, $this->items)) {
             $this->items[] = $item;
         }
         return $this;
@@ -173,6 +173,7 @@ class FeedResponse extends Response
             if ($item instanceof ItemInterface) {
                 $this->feed->addItem($item);
             } else {
+                /** @var ItemInterface $feedItem */
                 $feedItem = $this->itemMappers->find($item)->map($item);
                 $this->feed->addItem($feedItem);
             }
