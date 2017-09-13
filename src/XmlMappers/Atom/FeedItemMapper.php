@@ -62,7 +62,7 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
             $this->addSimpleTag($doc, $itemNode, 'summary', $description);
         }
 
-        $this->addSimpleTag(
+        /*$this->addSimpleTag(
             $doc,
             $itemNode,
             'link',
@@ -72,7 +72,7 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
                 'rel' => 'self',
                 'href' => $item->getLink()
             ]
-        );
+        );*/
 
         if (is_array($item->getEnclosures())) {
             foreach ($item->getEnclosures() as $enclosure) {
@@ -83,18 +83,10 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
         }
 
         if (is_array($item->getRelations())) {
-            foreach ($item->getRelations() as $relation => $url) {
-                $this->addSimpleTag(
-                    $doc,
-                    $itemNode,
-                    'link',
-                    null,
-                    null,
-                    [
-                        'rel' => $relation,
-                        'href' => $url,
-                    ]
-                );
+            foreach ($item->getRelations() as $relation) {
+                /** @var ItemMapperInterface $mapper */
+                $mapper = $this->getMapperCollection()->find($relation);
+                $itemNode->appendChild($mapper->map($doc, $relation));
             }
         }
 

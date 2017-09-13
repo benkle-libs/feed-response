@@ -64,18 +64,10 @@ class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
             $this->addSimpleTag($result, $root, 'subtitle', $description);
         }
 
-        foreach ($feed->getRelations() as $relation => $url) {
-            $this->addSimpleTag(
-                $result,
-                $root,
-                'link',
-                null,
-                null,
-                [
-                    'rel' => $relation,
-                    'href' => $url,
-                ]
-            );
+        foreach ($feed->getRelations() as $relation) {
+            /** @var ItemMapperInterface $mapper */
+            $mapper = $this->getMapperCollection()->find($relation);
+            $root->appendChild($mapper->map($result, $relation));
         }
 
         foreach ($feed->getItems() as $item) {

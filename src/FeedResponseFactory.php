@@ -28,6 +28,7 @@
 namespace Benkle\FeedResponse;
 
 use Benkle\FeedInterfaces\FeedInterface;
+use Benkle\FeedInterfaces\RelationLinkInterface;
 use Benkle\FeedResponse\Collections\ObjectMapperCollection;
 use Benkle\FeedResponse\XmlMappers\Atom\FeedMapper as AtomMapper;
 use Benkle\FeedResponse\XmlMappers\RSS20\FeedMapper as RssMapper;
@@ -49,6 +50,29 @@ class FeedResponseFactory
 
     /** @var  FeedInterface */
     private $feedPrototype;
+
+    /** @var  RelationLinkInterface */
+    private $relationLinkPrototype;
+
+    /**
+     * Get the prototype used to produce relation links.
+     * @return RelationLinkInterface
+     */
+    public function getRelationLinkPrototype()
+    {
+        return $this->relationLinkPrototype;
+    }
+
+    /**
+     * Set the prototype used to produce relation links.
+     * @param RelationLinkInterface $relationLinkPrototype
+     * @return $this
+     */
+    public function setRelationLinkPrototype($relationLinkPrototype)
+    {
+        $this->relationLinkPrototype = $relationLinkPrototype;
+        return $this;
+    }
 
     /**
      * Get the prototype used to produce feed bases.
@@ -150,8 +174,8 @@ class FeedResponseFactory
 
     /**
      * Prepare the feed used as base for the FeedResponse.
-     * @param $feedHead
-     * @param $relations
+     * @param array|FeedInterface $feedHead
+     * @param array $relations
      * @return FeedInterface
      */
     private function prepareFeed($feedHead, $relations)
@@ -175,11 +199,44 @@ class FeedResponseFactory
                 $relations['self'] = isset($feedHead['url']) ? $relations['self'] = $feedHead['url'] : null;
             }
 
-            foreach ($relations as $relation => $url) {
-                $feed->setRelation($relation, $url);
+            foreach ($relations as $relationType => $relationData) {
+                /** @var RelationLinkInterface $relation */
+                if ($relationData instanceof RelationLinkInterface) {
+                    $relation = $relationData;
+                } elseif (is_array($relationData)) {
+                    $relation = clone $this->relationLinkPrototype;
+                    $relation
+                        ->setUrl($this->fetchElement($relationData, ['url', 'href']))
+                        ->setRelationType($this->fetchElement($relationData, ['relationType', 'rel']))
+                        ->setMimeType($this->fetchElement($relationData, ['mimeType', 'mime', 'type']))
+                        ->setTitle($this->fetchElement($relationData, ['title']));
+                } else {
+                    $relation = clone $this->relationLinkPrototype;
+                    $relation
+                        ->setUrl($relationData)
+                        ->setRelationType($relationType);
+                }
+                $feed->setRelation($relation);
             }
         }
         return $feed;
+    }
+
+    /**
+     * Get an element from an array.
+     * @param array $array
+     * @param string|string[] $keys
+     * @param mixed|null $default
+     */
+    private function fetchElement(array $array, $keys, $default = null)
+    {
+        $keys = is_array($keys) ? $keys : [$keys];
+        foreach ($keys as $key) {
+            if (isset($array[$key])) {
+                return $array[$key];
+            }
+        }
+        return $default;
     }
 
     /**

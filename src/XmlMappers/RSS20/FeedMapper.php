@@ -60,18 +60,10 @@ class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
 
         $this->mapChannelMetadata($feed, $result, $channel);
 
-        foreach ($feed->getRelations() as $relation => $url) {
-            $this->addSimpleTag(
-                $result,
-                $channel,
-                'atom:link',
-                null,
-                'http://www.w3.org/2005/Atom',
-                [
-                    'rel' => $relation,
-                    'href' => $url,
-                ]
-            );
+        foreach ($feed->getRelations() as $relation) {
+            /** @var ItemMapperInterface $mapper */
+            $mapper = $this->getMapperCollection()->find($relation);
+            $root->appendChild($mapper->map($result, $relation));
         }
 
         foreach ($feed->getItems() as $item) {
