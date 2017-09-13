@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-  "content-hash": "9a91d14ce379a87a44228e6711c127fd",
+  "content-hash": "204abbfcd5ed0824a3582d7d340d5a19",
     "packages": [
         {
             "name": "benkle/feed-interfaces",
-            "version": "1.0.1",
+          "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/benkle-libs/feed-interfaces.git",
-                "reference": "b182ad315afc66966cd9e40172d0d573a41f20a1"
+              "reference": "f0ec720bdcbb8ab1bc3335b80ad83fe2a4b4a759"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/benkle-libs/feed-interfaces/zipball/b182ad315afc66966cd9e40172d0d573a41f20a1",
-                "reference": "b182ad315afc66966cd9e40172d0d573a41f20a1",
+              "url": "https://api.github.com/repos/benkle-libs/feed-interfaces/zipball/f0ec720bdcbb8ab1bc3335b80ad83fe2a4b4a759",
+              "reference": "f0ec720bdcbb8ab1bc3335b80ad83fe2a4b4a759",
                 "shasum": ""
             },
             "type": "library",
@@ -37,7 +37,7 @@
                 }
             ],
             "description": "Interfaces and exceptions shared between my feed handling packages",
-            "time": "2017-04-30T15:42:36+00:00"
+          "time": "2017-09-12T17:04:08+00:00"
         },
         {
             "name": "psr/http-message",
@@ -91,20 +91,20 @@
         },
       {
         "name": "symfony/http-foundation",
-        "version": "v3.3.6",
+        "version": "v3.3.9",
         "source": {
           "type": "git",
           "url": "https://github.com/symfony/http-foundation.git",
-          "reference": "49e8cd2d59a7aa9bfab19e46de680c76e500a031"
+          "reference": "2cdc7de1921d1a1c805a13dc05e44a2cd58f5ad3"
         },
         "dist": {
           "type": "zip",
-          "url": "https://api.github.com/repos/symfony/http-foundation/zipball/49e8cd2d59a7aa9bfab19e46de680c76e500a031",
-          "reference": "49e8cd2d59a7aa9bfab19e46de680c76e500a031",
+          "url": "https://api.github.com/repos/symfony/http-foundation/zipball/2cdc7de1921d1a1c805a13dc05e44a2cd58f5ad3",
+          "reference": "2cdc7de1921d1a1c805a13dc05e44a2cd58f5ad3",
           "shasum": ""
         },
         "require": {
-          "php": ">=5.5.9",
+          "php": "^5.5.9|>=7.0.8",
           "symfony/polyfill-mbstring": "~1.1"
         },
         "require-dev": {
@@ -140,7 +140,7 @@
         ],
         "description": "Symfony HttpFoundation Component",
         "homepage": "https://symfony.com",
-        "time": "2017-07-21T11:04:46+00:00"
+        "time": "2017-09-06T17:07:39+00:00"
       },
       {
         "name": "symfony/polyfill-mbstring",
@@ -205,20 +205,20 @@
     "packages-dev": [
         {
           "name": "benkle/feed-parser",
-          "version": "2.0.0",
+          "version": "2.1.0",
           "source": {
             "type": "git",
             "url": "https://github.com/benkle-libs/feed-parser.git",
-            "reference": "db687baa7c831500b936b9b2e3a88bc92ce6a38e"
+            "reference": "8b86daf9dfe57e6e7ccae83dbc65ac7ce462144f"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/benkle-libs/feed-parser/zipball/db687baa7c831500b936b9b2e3a88bc92ce6a38e",
-            "reference": "db687baa7c831500b936b9b2e3a88bc92ce6a38e",
+            "url": "https://api.github.com/repos/benkle-libs/feed-parser/zipball/8b86daf9dfe57e6e7ccae83dbc65ac7ce462144f",
+            "reference": "8b86daf9dfe57e6e7ccae83dbc65ac7ce462144f",
             "shasum": ""
           },
           "require": {
-            "benkle/feed-interfaces": "^1.0",
+            "benkle/feed-interfaces": "^1.1",
             "masterminds/html5": "^2.2",
             "php": ">=5.6.0",
             "psr/log": "^1.0"
@@ -253,7 +253,7 @@
             "parser",
             "rss"
           ],
-          "time": "2017-04-30T18:56:31+00:00"
+          "time": "2017-09-12T18:33:40+00:00"
         },
       {
             "name": "doctrine/instantiator",
@@ -311,16 +311,16 @@
         },
         {
           "name": "masterminds/html5",
-          "version": "2.2.2",
+          "version": "2.3.0",
           "source": {
             "type": "git",
             "url": "https://github.com/Masterminds/html5-php.git",
-            "reference": "7866e93dcf0245de22378414e0c2c7350abc45af"
+            "reference": "2c37c6c520b995b761674de3be8455a381679067"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/7866e93dcf0245de22378414e0c2c7350abc45af",
-            "reference": "7866e93dcf0245de22378414e0c2c7350abc45af",
+            "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/2c37c6c520b995b761674de3be8455a381679067",
+            "reference": "2c37c6c520b995b761674de3be8455a381679067",
             "shasum": ""
           },
           "require": {
@@ -372,7 +372,7 @@
             "serializer",
             "xml"
           ],
-          "time": "2016-09-22T11:01:11+00:00"
+          "time": "2017-09-04T12:26:28+00:00"
         },
       {
             "name": "myclabs/deep-copy",
@@ -418,16 +418,16 @@
         },
         {
             "name": "phpdocumentor/reflection-common",
-            "version": "1.0",
+          "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
-                "reference": "144c307535e82c8fdcaacbcfc1d6d8eeb896687c"
+              "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/144c307535e82c8fdcaacbcfc1d6d8eeb896687c",
-                "reference": "144c307535e82c8fdcaacbcfc1d6d8eeb896687c",
+              "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
+              "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
                 "shasum": ""
             },
             "require": {
@@ -468,26 +468,26 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27T11:43:31+00:00"
+          "time": "2017-09-11T18:02:19+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-          "version": "3.2.2",
+          "version": "4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-              "reference": "4aada1f93c72c35e22fb1383b47fee43b8f1d157"
+              "reference": "2d3d238c433cf69caeb4842e97a3223a116f94b2"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/4aada1f93c72c35e22fb1383b47fee43b8f1d157",
-              "reference": "4aada1f93c72c35e22fb1383b47fee43b8f1d157",
+              "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/2d3d238c433cf69caeb4842e97a3223a116f94b2",
+              "reference": "2d3d238c433cf69caeb4842e97a3223a116f94b2",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
+              "php": "^7.0",
                 "phpdocumentor/reflection-common": "^1.0@dev",
-              "phpdocumentor/type-resolver": "^0.3.0",
+              "phpdocumentor/type-resolver": "^0.4.0",
                 "webmozart/assert": "^1.0"
             },
             "require-dev": {
@@ -513,20 +513,20 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-          "time": "2017-08-08T06:39:58+00:00"
+          "time": "2017-08-30T18:51:59+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
-          "version": "0.3.0",
+          "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-              "reference": "fb3933512008d8162b3cdf9e18dba9309b7c3773"
+              "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/fb3933512008d8162b3cdf9e18dba9309b7c3773",
-              "reference": "fb3933512008d8162b3cdf9e18dba9309b7c3773",
+              "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7",
+              "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7",
                 "shasum": ""
             },
             "require": {
@@ -560,26 +560,26 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-          "time": "2017-06-03T08:32:36+00:00"
+          "time": "2017-07-14T14:27:02+00:00"
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.7.0",
+          "version": "v1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "93d39f1f7f9326d746203c7c056f300f7f126073"
+              "reference": "c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/93d39f1f7f9326d746203c7c056f300f7f126073",
-                "reference": "93d39f1f7f9326d746203c7c056f300f7f126073",
+              "url": "https://api.github.com/repos/phpspec/prophecy/zipball/c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6",
+              "reference": "c9b8c6088acd19d769d4cc0ffa60a9fe34344bd6",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
                 "php": "^5.3|^7.0",
-                "phpdocumentor/reflection-docblock": "^2.0|^3.0.2",
+              "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0",
                 "sebastian/comparator": "^1.1|^2.0",
                 "sebastian/recursion-context": "^1.0|^2.0|^3.0"
             },
@@ -590,7 +590,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6.x-dev"
+                  "dev-master": "1.7.x-dev"
                 }
             },
             "autoload": {
@@ -623,7 +623,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2017-03-02T20:05:34+00:00"
+          "time": "2017-09-04T11:05:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1577,20 +1577,20 @@
         },
         {
             "name": "symfony/yaml",
-          "version": "v3.3.6",
+          "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-              "reference": "ddc23324e6cfe066f3dd34a37ff494fa80b617ed"
+              "reference": "1d8c2a99c80862bdc3af94c1781bf70f86bccac0"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/symfony/yaml/zipball/ddc23324e6cfe066f3dd34a37ff494fa80b617ed",
-              "reference": "ddc23324e6cfe066f3dd34a37ff494fa80b617ed",
+              "url": "https://api.github.com/repos/symfony/yaml/zipball/1d8c2a99c80862bdc3af94c1781bf70f86bccac0",
+              "reference": "1d8c2a99c80862bdc3af94c1781bf70f86bccac0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+              "php": "^5.5.9|>=7.0.8"
             },
             "require-dev": {
                 "symfony/console": "~2.8|~3.0"
@@ -1628,7 +1628,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-          "time": "2017-07-23T12:43:26+00:00"
+          "time": "2017-07-29T21:54:42+00:00"
         },
         {
             "name": "webmozart/assert",
