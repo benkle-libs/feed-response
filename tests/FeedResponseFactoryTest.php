@@ -248,4 +248,196 @@ class FeedResponseFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($rssMapperMock, $response->getFeedMapper());
         $this->assertEquals($feedMock, $response->getFeed());
     }
+
+
+    public function testAtomWithFeed()
+    {
+        $atomMapperMock = $this->createMock(AtomMapper::class);
+        $atomMapperMock
+            ->expects($this->once())
+            ->method('getExtraHeaders')
+            ->willReturn([]);
+        $atomMapperMock
+            ->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content/type');
+        $objectMappers = $this->createMock(ObjectMapperCollection::class);
+        $feedMock = $this->createMock(FeedInterface::class);
+
+        $factory = new FeedResponseFactory();
+        $factory
+            ->setAtomMapper($atomMapperMock)
+            ->setObjectMappers($objectMappers);
+
+        $response = $factory->atom($feedMock, [], []);
+        $this->assertInstanceOf(FeedResponse::class, $response);
+        $this->assertEquals('content/type', $response->headers->get('Content-Type'));
+        $this->assertEquals($objectMappers, $response->getItemMappers());
+        $this->assertEquals($atomMapperMock, $response->getFeedMapper());
+        $this->assertEquals($feedMock, $response->getFeed());
+    }
+
+    public function testAtomWithRelations()
+    {
+        $atomMapperMock = $this->createMock(AtomMapper::class);
+        $atomMapperMock
+            ->expects($this->once())
+            ->method('getExtraHeaders')
+            ->willReturn([]);
+        $atomMapperMock
+            ->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content/type');
+        $objectMappers = $this->createMock(ObjectMapperCollection::class);
+
+        $relationLinkMock = $this->createMock(RelationLinkInterface::class);
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setUrl')
+            ->with('url')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setRelationType')
+            ->with('relationType')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setMimeType')
+            ->with('mimeType')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setTitle')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('title'),
+                    $this->equalTo(null)
+                )
+            )
+            ->willReturnSelf();
+
+        $feedMock = $this->createMock(FeedInterface::class);
+        $feedMock
+            ->method('setRelation')
+            ->with($relationLinkMock)
+            ->willReturnSelf();
+
+        $factory = new FeedResponseFactory();
+        $factory
+            ->setAtomMapper($atomMapperMock)
+            ->setObjectMappers($objectMappers)
+            ->setRelationLinkPrototype($relationLinkMock);
+
+        $response = $factory->atom(
+            $feedMock,
+            [],
+            [
+                'rel1' => $relationLinkMock,
+                'rel2' => [
+                    'url'          => 'url',
+                    'title'        => 'title',
+                    'mimeType'     => 'mimeType',
+                    'relationType' => 'relationType',
+                ],
+                'rel3' => [
+                    'href'  => 'url',
+                    'title' => 'title',
+                    'mime'  => 'mimeType',
+                    'rel'   => 'relationType',
+                ],
+                'rel4' => [
+                    'url'          => 'url',
+                    'title'        => 'title',
+                    'type'         => 'mimeType',
+                    'relationType' => 'relationType',
+                    'rel'          => 'rel',
+                ],
+                'rel5' => [
+                    'url'          => 'url',
+                    'mimeType'     => 'mimeType',
+                    'relationType' => 'relationType',
+                ],
+            ]
+        );
+        $this->assertInstanceOf(FeedResponse::class, $response);
+        $this->assertEquals('content/type', $response->headers->get('Content-Type'));
+        $this->assertEquals($objectMappers, $response->getItemMappers());
+        $this->assertEquals($atomMapperMock, $response->getFeedMapper());
+        $this->assertEquals($feedMock, $response->getFeed());
+    }
+
+    public function testAtomWithData()
+    {
+        $feeData = [
+            'id'          => 'id',
+            'link'        => '',
+            'modified'    => new \DateTime(),
+            'description' => 'description',
+            'title'       => 'title',
+            'url'         => 'url',
+        ];
+
+        $atomMapperMock = $this->createMock(AtomMapper::class);
+        $atomMapperMock
+            ->expects($this->once())
+            ->method('getExtraHeaders')
+            ->willReturn([]);
+        $atomMapperMock
+            ->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content/type');
+        $objectMappers = $this->createMock(ObjectMapperCollection::class);
+
+        $feedMock = $this->createMock(FeedInterface::class);
+        $feedMock
+            ->expects($this->once())
+            ->method('setPublicId')
+            ->with($feeData['id'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setLink')
+            ->with($feeData['link'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setDescription')
+            ->with($feeData['description'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setTitle')
+            ->with($feeData['title'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setLastModified')
+            ->with($feeData['modified'])
+            ->willReturnSelf();
+
+        $relationLinkMock = $this->createMock(RelationLinkInterface::class);
+        $relationLinkMock
+            ->expects($this->once())
+            ->method('setUrl')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->once())
+            ->method('setRelationType')
+            ->willReturnSelf();
+
+        $factory = new FeedResponseFactory();
+        $factory
+            ->setAtomMapper($atomMapperMock)
+            ->setObjectMappers($objectMappers)
+            ->setFeedPrototype($feedMock)
+            ->setRelationLinkPrototype($relationLinkMock);
+
+        $response = $factory->atom($feeData, [], []);
+        $this->assertInstanceOf(FeedResponse::class, $response);
+        $this->assertEquals('content/type', $response->headers->get('Content-Type'));
+        $this->assertEquals($objectMappers, $response->getItemMappers());
+        $this->assertEquals($atomMapperMock, $response->getFeedMapper());
+        $this->assertEquals($feedMock, $response->getFeed());
+    }
 }
