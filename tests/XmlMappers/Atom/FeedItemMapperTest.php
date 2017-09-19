@@ -30,8 +30,11 @@ namespace Benkle\FeedResponse\XmlMappers\Atom;
 
 use Benkle\FeedInterfaces\EnclosureInterface;
 use Benkle\FeedInterfaces\ItemInterface;
+use Benkle\FeedInterfaces\RelationLinkInterface;
 use Benkle\FeedResponse\Collections\FeedItemMapperCollection;
+use Benkle\FeedResponse\Collections\ObjectMapperCollection;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
+use Benkle\FeedResponse\Interfaces\ObjectMapperInterface;
 
 class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +54,6 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             '<id>publicId</id>' .
             '<updated>1998-12-12T12:12:12+00:00</updated>' .
             '<summary>description</summary>' .
-            '<link rel="self" href="link"/>' .
             '</entry>', $doc->saveXML($node));
     }
 
@@ -70,7 +72,7 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getPublicId')
             ->willReturn('publicId');
         $itemMock
-            ->expects($this->once())
+            //->expects($this->once())
             ->method('getLink')
             ->willReturn('link');
         $itemMock
@@ -92,9 +94,38 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
         $itemMock
             ->expects($this->exactly(2))
             ->method('getRelations')
-            ->willReturn(['self' => 'this', 'this' => 'self']);
+            ->willReturn(
+                [
+                    'self' => $this->mockRelationLink('self', 'this'),
+                    'this' => $this->mockRelationLink('this', 'self'),
+                ]
+            );
+
+        $linkMapper = $this->createMock(ObjectMapperInterface::class);
+        $linkMapper
+            ->method('map')
+            ->willReturnCallback(
+                function (\DOMDocument $doc, RelationLinkInterface $relation) {
+                    $result = $doc->createElement('link');
+                    $result->setAttribute('rel', $relation->getRelationType());
+                    $result->setAttribute('href', $relation->getUrl());
+                    if ($relation->getMimeType()) {
+                        $result->setAttribute('type', $relation->getMimeType());
+                    }
+                    if ($relation->getTitle()) {
+                        $result->setAttribute('title', $relation->getTitle());
+                    }
+                    return $result;
+                }
+            );
+
+        $mapperCollectionMock = $this->createMock(ObjectMapperCollection::class);
+        $mapperCollectionMock
+            ->method('find')
+            ->willReturn($linkMapper);
 
         $mapper = new FeedItemMapper();
+        $mapper->setMapperCollection($mapperCollectionMock);
 
         $node = $mapper->map($doc, $itemMock);
 
@@ -105,10 +136,21 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             '<id>publicId</id>' .
             '<updated>1998-12-12T12:12:12+00:00</updated>' .
             '<summary>description</summary>' .
-            '<link rel="self" href="link"/>' .
             '<link rel="self" href="this"/>' .
             '<link rel="this" href="self"/>' .
             '</entry>', $doc->saveXML($node));
+    }
+
+    private function mockRelationLink($rel, $href, $type = null, $title = null)
+    {
+        $result = $this->createMock(RelationLinkInterface::class);
+
+        $result->method('getUrl')->willReturn($href);
+        $result->method('getRelationType')->willReturn($rel);
+        $result->method('getMimeType')->willReturn($type);
+        $result->method('getTitle')->willReturn($title);
+
+        return $result;
     }
 
     public function testMappingEnclosures()
@@ -148,7 +190,6 @@ class FeedItemMapperTest extends \PHPUnit_Framework_TestCase
             '<id>publicId</id>' .
             '<updated>1998-12-12T12:12:12+00:00</updated>' .
             '<summary>description</summary>' .
-            '<link rel="self" href="link"/>' .
             '<enclosure/>' .
             '<enclosure/>' .
             '</entry>', $doc->saveXML($node));
