@@ -193,32 +193,30 @@ class FeedResponseFactory
                 ->setUrl(isset($feedHead['url']) ? $feedHead['url'] : '');
 
             if (!isset($relations['self'])) {
-                $relations['self'] = isset($feedHead['link']) ? $relations['self'] = $feedHead['link'] : null;
-            }
-            if (!isset($relations['self'])) {
-                $relations['self'] = isset($feedHead['url']) ? $relations['self'] = $feedHead['url'] : null;
-            }
-
-            foreach ($relations as $relationType => $relationData) {
-                /** @var RelationLinkInterface $relation */
-                if ($relationData instanceof RelationLinkInterface) {
-                    $relation = $relationData;
-                } elseif (is_array($relationData)) {
-                    $relation = clone $this->relationLinkPrototype;
-                    $relation
-                        ->setUrl($this->fetchElement($relationData, ['url', 'href']))
-                        ->setRelationType($this->fetchElement($relationData, ['relationType', 'rel']))
-                        ->setMimeType($this->fetchElement($relationData, ['mimeType', 'mime', 'type']))
-                        ->setTitle($this->fetchElement($relationData, ['title']));
-                } else {
-                    $relation = clone $this->relationLinkPrototype;
-                    $relation
-                        ->setUrl($relationData)
-                        ->setRelationType($relationType);
-                }
-                $feed->setRelation($relation);
+                $relations['self'] = $this->fetchElement($feedHead, ['link', 'url']);
             }
         }
+
+        foreach ($relations as $relationType => $relationData) {
+            /** @var RelationLinkInterface $relation */
+            if ($relationData instanceof RelationLinkInterface) {
+                $relation = $relationData;
+            } elseif (is_array($relationData)) {
+                $relation = clone $this->relationLinkPrototype;
+                $relation
+                    ->setUrl($this->fetchElement($relationData, ['url', 'href']))
+                    ->setRelationType($this->fetchElement($relationData, ['relationType', 'rel']))
+                    ->setMimeType($this->fetchElement($relationData, ['mimeType', 'mime', 'type']))
+                    ->setTitle($this->fetchElement($relationData, ['title']));
+            } else {
+                $relation = clone $this->relationLinkPrototype;
+                $relation
+                    ->setUrl($relationData)
+                    ->setRelationType($relationType);
+            }
+            $feed->setRelation($relation);
+        }
+
         return $feed;
     }
 

@@ -29,6 +29,7 @@ namespace Benkle\FeedResponse;
 
 
 use Benkle\FeedInterfaces\FeedInterface;
+use Benkle\FeedInterfaces\RelationLinkInterface;
 use Benkle\FeedResponse\Collections\ObjectMapperCollection;
 use Benkle\FeedResponse\XmlMappers\Atom\FeedMapper as AtomMapper;
 use Benkle\FeedResponse\XmlMappers\RSS20\FeedMapper as RssMapper;
@@ -41,6 +42,7 @@ class FeedResponseFactoryTest extends \PHPUnit_Framework_TestCase
         $atomMapperMock = $this->createMock(AtomMapper::class);
         $objectMappers = $this->createMock(ObjectMapperCollection::class);
         $feedMock = $this->createMock(FeedInterface::class);
+        $relationLinkMock = $this->createMock(RelationLinkInterface::class);
 
         $factory = new FeedResponseFactory();
 
@@ -52,5 +54,198 @@ class FeedResponseFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($objectMappers, $factory->getObjectMappers());
         $this->assertEquals($factory, $factory->setFeedPrototype($feedMock));
         $this->assertEquals($feedMock, $factory->getFeedPrototype());
+        $this->assertEquals($factory, $factory->setRelationLinkPrototype($relationLinkMock));
+        $this->assertEquals($relationLinkMock, $factory->getRelationLinkPrototype());
+    }
+
+    public function testRssWithFeed()
+    {
+        $rssMapperMock = $this->createMock(RssMapper::class);
+        $rssMapperMock
+            ->expects($this->once())
+            ->method('getExtraHeaders')
+            ->willReturn([]);
+        $rssMapperMock
+            ->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content/type');
+        $objectMappers = $this->createMock(ObjectMapperCollection::class);
+        $feedMock = $this->createMock(FeedInterface::class);
+
+        $factory = new FeedResponseFactory();
+        $factory
+            ->setRssMapper($rssMapperMock)
+            ->setObjectMappers($objectMappers);
+
+        $response = $factory->rss($feedMock, [], []);
+        $this->assertInstanceOf(FeedResponse::class, $response);
+        $this->assertEquals('content/type', $response->headers->get('Content-Type'));
+        $this->assertEquals($objectMappers, $response->getItemMappers());
+        $this->assertEquals($rssMapperMock, $response->getFeedMapper());
+        $this->assertEquals($feedMock, $response->getFeed());
+    }
+
+    public function testRssWithRelations()
+    {
+        $rssMapperMock = $this->createMock(RssMapper::class);
+        $rssMapperMock
+            ->expects($this->once())
+            ->method('getExtraHeaders')
+            ->willReturn([]);
+        $rssMapperMock
+            ->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content/type');
+        $objectMappers = $this->createMock(ObjectMapperCollection::class);
+
+        $relationLinkMock = $this->createMock(RelationLinkInterface::class);
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setUrl')
+            ->with('url')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setRelationType')
+            ->with('relationType')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setMimeType')
+            ->with('mimeType')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->atLeastOnce())
+            ->method('setTitle')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('title'),
+                    $this->equalTo(null)
+                )
+            )
+            ->willReturnSelf();
+
+        $feedMock = $this->createMock(FeedInterface::class);
+        $feedMock
+            ->method('setRelation')
+            ->with($relationLinkMock)
+            ->willReturnSelf();
+
+        $factory = new FeedResponseFactory();
+        $factory
+            ->setRssMapper($rssMapperMock)
+            ->setObjectMappers($objectMappers)
+            ->setRelationLinkPrototype($relationLinkMock);
+
+        $response = $factory->rss(
+            $feedMock,
+            [],
+            [
+                'rel1' => $relationLinkMock,
+                'rel2' => [
+                    'url'          => 'url',
+                    'title'        => 'title',
+                    'mimeType'     => 'mimeType',
+                    'relationType' => 'relationType',
+                ],
+                'rel3' => [
+                    'href'  => 'url',
+                    'title' => 'title',
+                    'mime'  => 'mimeType',
+                    'rel'   => 'relationType',
+                ],
+                'rel4' => [
+                    'url'          => 'url',
+                    'title'        => 'title',
+                    'type'         => 'mimeType',
+                    'relationType' => 'relationType',
+                    'rel'          => 'rel',
+                ],
+                'rel5' => [
+                    'url'          => 'url',
+                    'mimeType'     => 'mimeType',
+                    'relationType' => 'relationType',
+                ],
+            ]
+        );
+        $this->assertInstanceOf(FeedResponse::class, $response);
+        $this->assertEquals('content/type', $response->headers->get('Content-Type'));
+        $this->assertEquals($objectMappers, $response->getItemMappers());
+        $this->assertEquals($rssMapperMock, $response->getFeedMapper());
+        $this->assertEquals($feedMock, $response->getFeed());
+    }
+
+    public function testRssWithData()
+    {
+        $feeData = [
+            'id'          => 'id',
+            'link'        => '',
+            'modified'    => new \DateTime(),
+            'description' => 'description',
+            'title'       => 'title',
+            'url'         => 'url',
+        ];
+
+        $rssMapperMock = $this->createMock(RssMapper::class);
+        $rssMapperMock
+            ->expects($this->once())
+            ->method('getExtraHeaders')
+            ->willReturn([]);
+        $rssMapperMock
+            ->expects($this->once())
+            ->method('getContentType')
+            ->willReturn('content/type');
+        $objectMappers = $this->createMock(ObjectMapperCollection::class);
+
+        $feedMock = $this->createMock(FeedInterface::class);
+        $feedMock
+            ->expects($this->once())
+            ->method('setPublicId')
+            ->with($feeData['id'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setLink')
+            ->with($feeData['link'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setDescription')
+            ->with($feeData['description'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setTitle')
+            ->with($feeData['title'])
+            ->willReturnSelf();
+        $feedMock
+            ->expects($this->once())
+            ->method('setLastModified')
+            ->with($feeData['modified'])
+            ->willReturnSelf();
+
+        $relationLinkMock = $this->createMock(RelationLinkInterface::class);
+        $relationLinkMock
+            ->expects($this->once())
+            ->method('setUrl')
+            ->willReturnSelf();
+        $relationLinkMock
+            ->expects($this->once())
+            ->method('setRelationType')
+            ->willReturnSelf();
+
+        $factory = new FeedResponseFactory();
+        $factory
+            ->setRssMapper($rssMapperMock)
+            ->setObjectMappers($objectMappers)
+            ->setFeedPrototype($feedMock)
+            ->setRelationLinkPrototype($relationLinkMock);
+
+        $response = $factory->rss($feeData, [], []);
+        $this->assertInstanceOf(FeedResponse::class, $response);
+        $this->assertEquals('content/type', $response->headers->get('Content-Type'));
+        $this->assertEquals($objectMappers, $response->getItemMappers());
+        $this->assertEquals($rssMapperMock, $response->getFeedMapper());
+        $this->assertEquals($feedMock, $response->getFeed());
     }
 }
