@@ -68,7 +68,7 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
         }
 
         if (is_array($item->getRelations())) {
-            foreach ($item->getRelations() as $relation => $url) {
+            foreach ($item->getRelations() as $relation) {
                 /** @var ItemMapperInterface $mapper */
                 $mapper = $this->getMapperCollection()->find($relation);
                 $itemNode->appendChild($mapper->map($doc, $relation));

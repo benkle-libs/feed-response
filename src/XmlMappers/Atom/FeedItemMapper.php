@@ -62,18 +62,6 @@ class FeedItemMapper implements ItemMapperInterface, HasMapperCollectionInterfac
             $this->addSimpleTag($doc, $itemNode, 'summary', $description);
         }
 
-        /*$this->addSimpleTag(
-            $doc,
-            $itemNode,
-            'link',
-            null,
-            null,
-            [
-                'rel' => 'self',
-                'href' => $item->getLink()
-            ]
-        );*/
-
         if (is_array($item->getEnclosures())) {
             foreach ($item->getEnclosures() as $enclosure) {
                 /** @var ItemMapperInterface $mapper */
