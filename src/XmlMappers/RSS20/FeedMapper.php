@@ -28,7 +28,6 @@
 namespace Benkle\FeedResponse\XmlMappers\RSS20;
 
 use Benkle\FeedInterfaces\FeedInterface;
-use Benkle\FeedInterfaces\ItemInterface;
 use Benkle\FeedResponse\Interfaces\FeedMapperInterface;
 use Benkle\FeedResponse\Interfaces\HasMapperCollectionInterface;
 use Benkle\FeedResponse\Interfaces\ItemMapperInterface;
@@ -97,19 +96,5 @@ class FeedMapper implements HasMapperCollectionInterface, FeedMapperInterface
     public function getContentType()
     {
         return 'application/rss+xml';
-    }
-
-    /**
-     * @param \DOMDocument $doc
-     * @param \DOMNode $itemNode
-     * @param ItemInterface $item
-     */
-    protected function mapItem(\DOMDocument $doc, \DOMNode $itemNode, ItemInterface $item)
-    {
-        $this->addSimpleTag($doc, $itemNode, 'title', $item->getTitle());
-        $this->addSimpleTag($doc, $itemNode, 'description', $item->getDescription());
-        $this->addSimpleTag($doc, $itemNode, 'link', $item->getLink());
-        $this->addSimpleTag($doc, $itemNode, 'guid', $item->getPublicId());
-        $this->addSimpleTag($doc, $itemNode, 'pubDate', $item->getLastModified()->format(\DateTime::RSS));
     }
 }
